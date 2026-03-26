@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CPI Kalkulačka | Kalkulačka Inflácie</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/cpi.css" />
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="index.html" class="nav-brand">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      Inflačná Kalkulačka
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Základná</a>
+      <a href="cpi.html" class="nav-link active">CPI</a>
+    </div>
+  </nav>
+
+  <main class="container cpi-container">
+
+    <header class="header">
+      <div class="header-tag">Index spotrebiteľských cien</div>
+      <h1 class="title">CPI<br><em>Kalkulačka</em></h1>
+      <p class="subtitle">Porovnajte kúpnu silu na základe skutočných hodnôt CPI indexu medzi dvoma rokmi</p>
+    </header>
+
+    <!-- Method Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="compare">Porovnanie rokov</button>
+      <button class="tab" data-tab="custom">Vlastné CPI hodnoty</button>
+      <button class="tab" data-tab="basket">Nákupný košík</button>
+    </div>
+
+    <!-- TAB 1: Compare years -->
+    <section class="tab-panel active" id="tab-compare">
+      <div class="card">
+        <div class="card-inner">
+          <div class="info-banner">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Používame historické CPI dáta Eurostatu pre Slovensko (2015 = 100)
+          </div>
+
+          <div class="input-row">
+            <div class="input-group">
+              <label for="cmpAmount">Suma</label>
+              <div class="input-wrapper">
+                <input type="number" id="cmpAmount" placeholder="1 000" min="0" step="any" />
+                <span class="input-unit">€</span>
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="cmpFrom">Rok od</label>
+              <div class="input-wrapper select-wrapper">
+                <select id="cmpFrom"></select>
+                <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="cmpTo">Rok do</label>
+              <div class="input-wrapper select-wrapper">
+                <select id="cmpTo"></select>
+                <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-calculate" id="cmpCalcBtn">
+            <span>Vypočítať</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="results" id="cmpResults">
+        <div class="result-row">
+          <div class="result-card highlight">
+            <div class="result-label">Ekvivalent dnes</div>
+            <div class="result-value" id="cmpEquivalent">—</div>
+            <div class="result-sub" id="cmpSubLabel">upravené o CPI</div>
+          </div>
+          <div class="result-card">
+            <div class="result-label">Zmena CPI</div>
+            <div class="result-value" id="cmpCpiChange">—</div>
+            <div class="result-sub">percentuálny nárast</div>
+          </div>
+          <div class="result-card loss">
+            <div class="result-label">Reálna strata / zisk</div>
+            <div class="result-value" id="cmpRealDiff">—</div>
+            <div class="result-sub">rozdiel v eurách</div>
+          </div>
+        </div>
+
+        <div class="cpi-timeline" id="cpiTimeline"></div>
+
+        <div class="chart-section">
+          <div class="chart-header">
+            <span>CPI Index — vývoj (Slovensko)</span>
+            <div class="chart-legend">
+              <span class="legend-dot nominal"></span> CPI index
+              <span class="legend-dot real"></span> Vybraté roky
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="cpiChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: Custom CPI -->
+    <section class="tab-panel" id="tab-custom">
+      <div class="card">
+        <div class="card-inner">
+          <div class="info-banner">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Zadajte vlastné hodnoty CPI indexu z akéhokoľvek zdroja (napr. štatistický úrad)
+          </div>
+
+          <div class="input-row three-col">
+            <div class="input-group">
+              <label for="custAmount">Suma</label>
+              <div class="input-wrapper">
+                <input type="number" id="custAmount" placeholder="1 000" min="0" step="any"/>
+                <span class="input-unit">€</span>
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="custCpiFrom">CPI — základný rok</label>
+              <div class="input-wrapper">
+                <input type="number" id="custCpiFrom" placeholder="100.0" min="0" step="0.01"/>
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="custCpiTo">CPI — cieľový rok</label>
+              <div class="input-wrapper">
+                <input type="number" id="custCpiTo" placeholder="118.5" min="0" step="0.01"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="formula-box">
+            <div class="formula-label">Vzorec výpočtu</div>
+            <div class="formula">
+              Upravená suma = Pôvodná suma × (CPI<sub>cieľový</sub> ÷ CPI<sub>základný</sub>)
+            </div>
+          </div>
+
+          <button class="btn-calculate" id="custCalcBtn">
+            <span>Vypočítať</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="results" id="custResults">
+        <div class="result-row">
+          <div class="result-card highlight">
+            <div class="result-label">Upravená suma</div>
+            <div class="result-value" id="custAdjusted">—</div>
+            <div class="result-sub">podľa CPI</div>
+          </div>
+          <div class="result-card">
+            <div class="result-label">Inflačný faktor</div>
+            <div class="result-value" id="custFactor">—</div>
+            <div class="result-sub">násobiteľ</div>
+          </div>
+          <div class="result-card loss">
+            <div class="result-label">Zmena hodnoty</div>
+            <div class="result-value" id="custChange">—</div>
+            <div class="result-sub">% zmena</div>
+          </div>
+        </div>
+
+        <div class="gauge-section">
+          <div class="gauge-label">Inflačný faktor</div>
+          <div class="gauge-wrap">
+            <div class="gauge-bar">
+              <div class="gauge-fill" id="gaugeFill"></div>
+              <div class="gauge-marker" id="gaugeMarker"></div>
+            </div>
+            <div class="gauge-ticks">
+              <span>0.5×</span><span>1×</span><span>1.5×</span><span>2×</span><span>2.5×</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Basket -->
+    <section class="tab-panel" id="tab-basket">
+      <div class="card">
+        <div class="card-inner">
+
+          <div class="info-banner">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Porovnajte ceny konkrétnych položiek nákupného košíka medzi rokmi
+          </div>
+
+          <div class="input-row" style="max-width:360px">
+            <div class="input-group">
+              <label for="bsktFrom">Rok od</label>
+              <div class="input-wrapper select-wrapper">
+                <select id="bsktFrom"></select>
+                <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="bsktTo">Rok do</label>
+              <div class="input-wrapper select-wrapper">
+                <select id="bsktTo"></select>
+                <svg class="select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="basket-grid" id="basketGrid"></div>
+
+          <button class="btn-calculate" id="bsktCalcBtn">
+            <span>Prepočítať košík</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="results" id="bsktResults">
+        <div class="basket-results-grid" id="basketResultsGrid"></div>
+        <div class="result-row" style="margin-top:0">
+          <div class="result-card highlight">
+            <div class="result-label">Celková suma — vtedy</div>
+            <div class="result-value" id="bsktTotalFrom">—</div>
+            <div class="result-sub" id="bsktFromLabel">rok</div>
+          </div>
+          <div class="result-card">
+            <div class="result-label">Celková suma — dnes</div>
+            <div class="result-value" id="bsktTotalTo">—</div>
+            <div class="result-sub" id="bsktToLabel">rok</div>
+          </div>
+          <div class="result-card loss">
+            <div class="result-label">Zdraženie košíka</div>
+            <div class="result-value" id="bsktTotalPct">—</div>
+            <div class="result-sub">celkovo</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CPI Reference Table -->
+    <section class="ref-section">
+      <div class="ref-header">
+        <span>Referenčné CPI hodnoty — Slovensko</span>
+        <span class="ref-source">Zdroj: Eurostat, 2015 = 100</span>
+      </div>
+      <div class="ref-grid" id="refGrid"></div>
+    </section>
+
+    <footer class="footer">
+      Výpočty sú orientačné. CPI dáta: Eurostat (harmonizovaný index HICP). Posledná aktualizácia dát: 2024.
+    </footer>
+
+  </main>
+
+  <script src="assets/js/cpi.js"></script>
+</body>
+</html>
