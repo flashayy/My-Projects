@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editor Nalepky — NalepCar</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ══ SITE HEADER — NalepCar.sk nav ══ -->
+  <header id="header">
+    <a class="logo" href="#">
+      <img src="nalpcar-white-only.png" alt="NalepCar logo" />
+    </a>
+
+    <nav class="header-nav">
+      <button class="nav-link">Na želanie</button>
+      <button class="nav-link">O nás</button>
+      <button class="nav-link">Pokľadňa</button>
+      <button class="nav-link">Môj účet</button>
+      <button class="nav-link">Košík</button>
+      <button class="nav-link active">Editor</button>
+      <button class="nav-link">Viac</button>
+    </nav>
+
+    <div class="header-icons">
+      <button class="icon-btn" title="Košík">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-badge">2</span>
+      </button>
+      <button class="icon-btn" title="Tmavý režim">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="icon-btn" title="Hľadať">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ══ EDITOR TOPBAR — breadcrumb + actions ══ -->
+  <div id="editor-topbar">
+    <div class="breadcrumb">
+      <a href="#">Obchod</a>
+      <span class="breadcrumb-sep">›</span>
+      <a href="#">Na želanie</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">Editor nalepky</span>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn-ghost" id="btn-new">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+        Nový
+      </button>
+      <button class="btn-ghost" id="btn-undo">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,14 4,9 9,4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>
+        Späť
+      </button>
+      <button class="btn-ghost" id="btn-redo">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15,14 20,9 15,4"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/></svg>
+        Vpred
+      </button>
+      <button class="btn-primary" id="btn-export-png">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Stiahnuť PNG
+      </button>
+      <button class="btn-primary" id="btn-export-svg">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Stiahnuť SVG
+      </button>
+    </div>
+  </div>
+
+  <div id="workspace">
+
+    <!-- ══ LEFT PANEL ══ -->
+    <aside id="left-panel">
+
+      <!-- FORMAT -->
+      <section class="panel-section">
+        <div class="section-label">Formát nalepky</div>
+        <div class="preset-grid">
+          <button class="preset-btn active" data-w="400" data-h="200">Obdĺžnik</button>
+          <button class="preset-btn" data-w="300" data-h="300">Štvorec</button>
+          <button class="preset-btn" data-w="200" data-h="400">Portrait</button>
+          <button class="preset-btn" data-w="500" data-h="150">Banner</button>
+          <button class="preset-btn" data-w="300" data-h="300" data-shape="circle">Kruh</button>
+          <button class="preset-btn" data-w="350" data-h="300" data-shape="hex">Šestuholník</button>
+        </div>
+        <div class="size-inputs">
+          <div class="input-group">
+            <label>Š (px)</label>
+            <input type="number" id="canvas-width" value="400" min="50" max="1200" />
+          </div>
+          <div class="input-group">
+            <label>V (px)</label>
+            <input type="number" id="canvas-height" value="200" min="50" max="1200" />
+          </div>
+          <button class="btn-apply" id="btn-apply-size">OK</button>
+        </div>
+      </section>
+
+      <!-- BACKGROUND -->
+      <section class="panel-section">
+        <div class="section-label">Pozadie</div>
+        <div class="color-row">
+          <input type="color" id="bg-color" value="#1a1a1a" class="color-picker" />
+          <span class="color-label">Farba pozadia</span>
+        </div>
+        <div class="bg-presets">
+          <div class="swatch" style="background:#ffffff" data-color="#ffffff" title="Biela"></div>
+          <div class="swatch" style="background:#000000" data-color="#000000" title="Čierna"></div>
+          <div class="swatch" style="background:#e53e3e" data-color="#e53e3e" title="Červená"></div>
+          <div class="swatch" style="background:#8dc63f" data-color="#8dc63f" title="Zelená"></div>
+          <div class="swatch" style="background:#3182ce" data-color="#3182ce" title="Modrá"></div>
+          <div class="swatch transparent-swatch" data-color="transparent" title="Priehľadné"></div>
+        </div>
+        <div class="gradient-controls">
+          <button class="btn-mini" id="btn-gradient">+ Gradient</button>
+          <button class="btn-mini" id="btn-bg-image">+ Vzor</button>
+        </div>
+      </section>
+
+      <!-- ADD ELEMENTS -->
+      <section class="panel-section">
+        <div class="section-label">Pridať prvok</div>
+        <div class="add-grid">
+          <button class="add-btn" id="btn-add-text">
+            <span class="add-icon">T</span>
+            <span>Text</span>
+          </button>
+          <button class="add-btn" id="btn-add-image">
+            <span class="add-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+            </span>
+            <span>Foto</span>
+          </button>
+          <button class="add-btn" id="btn-add-rect">
+            <span class="add-icon">▬</span>
+            <span>Obdĺžnik</span>
+          </button>
+          <button class="add-btn" id="btn-add-circle">
+            <span class="add-icon">●</span>
+            <span>Kruh</span>
+          </button>
+          <button class="add-btn" id="btn-add-triangle">
+            <span class="add-icon">▲</span>
+            <span>Trojuholník</span>
+          </button>
+          <button class="add-btn" id="btn-add-star">
+            <span class="add-icon">★</span>
+            <span>Hviezda</span>
+          </button>
+          <button class="add-btn" id="btn-add-arrow">
+            <span class="add-icon">➤</span>
+            <span>Šípka</span>
+          </button>
+          <button class="add-btn" id="btn-add-line">
+            <span class="add-icon">—</span>
+            <span>Čiara</span>
+          </button>
+          <button class="add-btn" id="btn-add-polygon">
+            <span class="add-icon">⬡</span>
+            <span>Polygon</span>
+          </button>
+          <button class="add-btn" id="btn-freehand">
+            <span class="add-icon">✏</span>
+            <span>Kresba</span>
+          </button>
+        </div>
+        <input type="file" id="image-upload" accept="image/*" style="display:none" />
+      </section>
+
+      <!-- CUSTOM SHAPES -->
+      <section class="panel-section">
+        <div class="section-label">Vlastné tvary</div>
+        <div class="symbol-grid" id="symbol-grid">
+          <!-- rendered by JS -->
+        </div>
+      </section>
+
+    </aside>
+
+    <!-- ══ CANVAS AREA ══ -->
+    <main id="canvas-area">
+      <div id="canvas-container">
+        <canvas id="sticker-canvas"></canvas>
+      </div>
+      <div id="canvas-info">
+        <span id="info-size">400 × 200 px</span>
+        <span id="info-zoom">100%</span>
+        <span id="info-objects">0 prvkov</span>
+      </div>
+      <div id="zoom-controls">
+        <button class="zoom-btn" id="btn-zoom-out">−</button>
+        <button class="zoom-btn" id="btn-zoom-reset">⊙</button>
+        <button class="zoom-btn" id="btn-zoom-in">+</button>
+      </div>
+    </main>
+
+    <!-- ══ RIGHT PANEL ══ -->
+    <aside id="right-panel">
+
+      <!-- OBJECT PROPERTIES -->
+      <section class="panel-section" id="section-object-props">
+        <div class="section-label">Vlastnosti objektu</div>
+        <div id="no-selection">
+          <p class="hint-text">Vyber objekt na plátne</p>
+        </div>
+        <div id="object-props" style="display:none">
+
+          <!-- Position & Size -->
+          <div class="prop-group">
+            <div class="prop-row">
+              <div class="input-group-sm">
+                <label>X</label>
+                <input type="number" id="prop-x" class="prop-input" />
+              </div>
+              <div class="input-group-sm">
+                <label>Y</label>
+                <input type="number" id="prop-y" class="prop-input" />
+              </div>
+            </div>
+            <div class="prop-row">
+              <div class="input-group-sm">
+                <label>Šírka</label>
+                <input type="number" id="prop-w" class="prop-input" />
+              </div>
+              <div class="input-group-sm">
+                <label>Výška</label>
+                <input type="number" id="prop-h" class="prop-input" />
+              </div>
+            </div>
+            <div class="prop-row">
+              <div class="input-group-sm full">
+                <label>Rotácia (°)</label>
+                <input type="range" id="prop-angle" min="-180" max="180" value="0" />
+                <span id="prop-angle-val">0°</span>
+              </div>
+            </div>
+            <div class="prop-row">
+              <div class="input-group-sm full">
+                <label>Priehľadnosť</label>
+                <input type="range" id="prop-opacity" min="0" max="100" value="100" />
+                <span id="prop-opacity-val">100%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fill & Stroke -->
+          <div class="prop-group" id="fill-stroke-group">
+            <div class="section-label-sm">Výplň & obrys</div>
+            <div class="color-row">
+              <input type="color" id="prop-fill" value="#e53e3e" class="color-picker" />
+              <span class="color-label">Výplň</span>
+              <label class="toggle-label">
+                <input type="checkbox" id="prop-no-fill" />
+                <span>Bez výplne</span>
+              </label>
+            </div>
+            <div class="color-row">
+              <input type="color" id="prop-stroke" value="#ffffff" class="color-picker" />
+              <span class="color-label">Obrys</span>
+              <div class="input-group-sm">
+                <label>Hrúbka</label>
+                <input type="number" id="prop-stroke-width" value="0" min="0" max="50" class="prop-input" />
+              </div>
+            </div>
+            <div class="color-row">
+              <span class="color-label">Typ obruby</span>
+              <select id="prop-stroke-style" class="prop-select">
+                <option value="solid">Plná</option>
+                <option value="dashed">Prerušovaná</option>
+                <option value="dotted">Bodkovaná</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Shadow -->
+          <div class="prop-group">
+            <div class="section-label-sm">Tieň</div>
+            <label class="toggle-label">
+              <input type="checkbox" id="prop-shadow-enable" />
+              <span>Povoliť tieň</span>
+            </label>
+            <div id="shadow-controls" style="display:none">
+              <div class="color-row">
+                <input type="color" id="prop-shadow-color" value="#000000" class="color-picker" />
+                <span class="color-label">Farba tieňa</span>
+              </div>
+              <div class="prop-row">
+                <div class="input-group-sm full">
+                  <label>Blur</label>
+                  <input type="range" id="prop-shadow-blur" min="0" max="50" value="10" />
+                </div>
+              </div>
+              <div class="prop-row">
+                <div class="input-group-sm">
+                  <label>Offset X</label>
+                  <input type="range" id="prop-shadow-ox" min="-30" max="30" value="5" />
+                </div>
+                <div class="input-group-sm">
+                  <label>Offset Y</label>
+                  <input type="range" id="prop-shadow-oy" min="-30" max="30" value="5" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TEXT -->
+          <div class="prop-group" id="text-props" style="display:none">
+            <div class="section-label-sm">Text</div>
+            <div class="prop-row">
+              <input type="text" id="prop-text-content" class="prop-input full-input" placeholder="Text nalepky..." />
+            </div>
+            <div class="prop-row">
+              <div class="input-group-sm full">
+                <label>Písmo</label>
+                <select id="prop-font-family" class="prop-select">
+                  <option value="Bebas Neue">Bebas Neue</option>
+                  <option value="Impact">Impact</option>
+                  <option value="Arial Black">Arial Black</option>
+                  <option value="Nunito Sans">Nunito Sans</option>
+                  <option value="DM Mono">DM Mono</option>
+                  <option value="Times New Roman">Times New Roman</option>
+                  <option value="Courier New">Courier New</option>
+                  <option value="Georgia">Georgia</option>
+                  <option value="Verdana">Verdana</option>
+                </select>
+              </div>
+            </div>
+            <div class="prop-row">
+              <div class="input-group-sm">
+                <label>Veľkosť</label>
+                <input type="number" id="prop-font-size" value="40" min="4" max="300" class="prop-input" />
+              </div>
+              <div class="input-group-sm">
+                <label>Spacing</label>
+                <input type="number" id="prop-char-spacing" value="0" min="-200" max="800" class="prop-input" />
+              </div>
+            </div>
+            <div class="text-style-btns">
+              <button class="style-btn" id="btn-bold" title="Tučné"><strong>B</strong></button>
+              <button class="style-btn" id="btn-italic" title="Kurzíva"><em>I</em></button>
+              <button class="style-btn" id="btn-underline" title="Podčiarknutie"><u>U</u></button>
+              <button class="style-btn" id="btn-align-left" title="Vľavo">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><rect x="0" y="0" width="12" height="2"/><rect x="0" y="4" width="8" height="2"/><rect x="0" y="8" width="10" height="2"/></svg>
+              </button>
+              <button class="style-btn" id="btn-align-center" title="Stred">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><rect x="0" y="0" width="12" height="2"/><rect x="2" y="4" width="8" height="2"/><rect x="1" y="8" width="10" height="2"/></svg>
+              </button>
+              <button class="style-btn" id="btn-align-right" title="Vpravo">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><rect x="0" y="0" width="12" height="2"/><rect x="4" y="4" width="8" height="2"/><rect x="2" y="8" width="10" height="2"/></svg>
+              </button>
+            </div>
+            <div class="color-row">
+              <input type="color" id="prop-text-color" value="#ffffff" class="color-picker" />
+              <span class="color-label">Farba textu</span>
+            </div>
+            <div class="section-label-sm">Efekty textu</div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              <button class="btn-mini" id="btn-text-outline">Obrys</button>
+              <button class="btn-mini" id="btn-text-glow">Žiara</button>
+              <button class="btn-mini" id="btn-text-arch">Oblúk</button>
+            </div>
+          </div>
+
+          <!-- IMAGE -->
+          <div class="prop-group" id="image-props" style="display:none">
+            <div class="section-label-sm">Obrázok — filtre</div>
+            <div class="filter-controls">
+              <div class="filter-row">
+                <label>Jas</label>
+                <input type="range" id="img-brightness" min="-1" max="1" step="0.05" value="0" />
+              </div>
+              <div class="filter-row">
+                <label>Kontrast</label>
+                <input type="range" id="img-contrast" min="-1" max="1" step="0.05" value="0" />
+              </div>
+              <div class="filter-row">
+                <label>Saturácia</label>
+                <input type="range" id="img-saturation" min="-1" max="1" step="0.05" value="0" />
+              </div>
+              <div class="filter-row">
+                <label>Odtieň</label>
+                <input type="range" id="img-hue" min="-180" max="180" step="1" value="0" />
+              </div>
+              <div class="filter-row">
+                <label>Blur</label>
+                <input type="range" id="img-blur" min="0" max="1" step="0.05" value="0" />
+              </div>
+            </div>
+            <div class="image-effects-grid">
+              <button class="effect-btn" data-effect="grayscale">Čiernobiely</button>
+              <button class="effect-btn" data-effect="invert">Inverzia</button>
+              <button class="effect-btn" data-effect="sepia">Sépia</button>
+              <button class="effect-btn" data-effect="none">Reset</button>
+            </div>
+          </div>
+
+          <!-- LAYER ORDER -->
+          <div class="prop-group">
+            <div class="section-label-sm">Poradie vrstiev</div>
+            <div class="layer-btns">
+              <button class="btn-mini" id="btn-bring-front">Na vrch</button>
+              <button class="btn-mini" id="btn-send-back">Na spodok</button>
+              <button class="btn-mini" id="btn-bring-forward">Vyššie</button>
+              <button class="btn-mini" id="btn-send-backward">Nižšie</button>
+            </div>
+          </div>
+
+          <!-- ALIGN -->
+          <div class="prop-group">
+            <div class="section-label-sm">Zarovnanie</div>
+            <div class="align-btns">
+              <button class="btn-mini" data-align="left">← Vľavo</button>
+              <button class="btn-mini" data-align="centerH">↔ Stred H</button>
+              <button class="btn-mini" data-align="right">→ Vpravo</button>
+              <button class="btn-mini" data-align="top">↑ Vrch</button>
+              <button class="btn-mini" data-align="centerV">↕ Stred V</button>
+              <button class="btn-mini" data-align="bottom">↓ Spodok</button>
+            </div>
+          </div>
+
+          <!-- TRANSFORM -->
+          <div class="prop-group">
+            <div class="section-label-sm">Transformácia</div>
+            <div class="transform-btns">
+              <button class="btn-mini" id="btn-flip-h">↔ Zrkadlo H</button>
+              <button class="btn-mini" id="btn-flip-v">↕ Zrkadlo V</button>
+              <button class="btn-mini" id="btn-duplicate">⎘ Duplikovať</button>
+              <button class="btn-mini btn-danger" id="btn-delete">✕ Zmazať</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- LAYERS LIST -->
+      <section class="panel-section" id="layers-section">
+        <div class="section-label">Vrstvy</div>
+        <div id="layers-list"></div>
+      </section>
+
+    </aside>
+  </div>
+
+  <!-- FREEHAND TOOLBAR -->
+  <div id="freehand-toolbar" style="display:none">
+    <span class="toolbar-label">Kresba voľnou rukou</span>
+    <input type="color" id="brush-color" value="#e53e3e" class="color-picker" />
+    <div class="input-group-sm">
+      <label>Veľkosť</label>
+      <input type="range" id="brush-size" min="1" max="50" value="5" />
+      <span id="brush-size-val">5</span>
+    </div>
+    <select id="brush-type" class="prop-select" style="width:auto">
+      <option value="Pencil">Ceruzka</option>
+      <option value="Circle">Kruh</option>
+      <option value="Spray">Sprej</option>
+    </select>
+    <button class="btn-primary" id="btn-freehand-exit">✓ Hotovo</button>
+  </div>
+
+  <!-- STATUS BAR -->
+  <div id="status-bar">
+    <span id="status-msg">Pripravený</span>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
