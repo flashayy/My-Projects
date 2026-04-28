@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ember Studio — Web & Design Agency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.cdnfonts.com/css/neue-montreal');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --orange:  #FF6D29;
+  --brown:   #453027;
+  --black:   #161316;
+  --silver:  #BABABA;
+  --white:   #FFFFFF;
+  --glow:    rgba(255,109,41,.5);
+  --serif:   'DM Serif Display', Georgia, serif;
+  --sans:    'Neue Montreal','PP Neue Montreal', system-ui, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--sans);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── cursor ── */
+#cur {
+  position: fixed; z-index: 9999; pointer-events: none;
+  width: 10px; height: 10px;
+  background: var(--orange); border-radius: 50%;
+  transform: translate(-50%,-50%);
+  transition: width .25s ease, height .25s ease,
+              background .25s ease, border .25s ease;
+  mix-blend-mode: normal;
+}
+#cur.big {
+  width: 52px; height: 52px;
+  background: transparent;
+  border: 1.5px solid var(--orange);
+}
+#cur.text-mode {
+  width: 80px; height: 80px;
+  background: var(--orange);
+  border-radius: 40px;
+}
+
+/* ── noise ── */
+body::before {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  opacity:.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px;
+}
+
+/* ── glows ── */
+.gb { position:fixed; border-radius:50%; filter:blur(130px); pointer-events:none; z-index:0; }
+.gb1 { width:700px; height:700px; top:-200px; left:-150px; background:var(--glow); opacity:.38; animation: dr 14s ease-in-out infinite alternate; }
+.gb2 { width:500px; height:500px; bottom:-100px; right:-100px; background:rgba(255,109,41,.25); opacity:.35; animation: dr 18s ease-in-out infinite alternate-reverse; }
+.gb3 { width:300px; height:300px; top:40%; left:50%; background:rgba(255,109,41,.15); opacity:.3; animation: dr 10s ease-in-out infinite alternate; }
+@keyframes dr { from{transform:translate(0,0) scale(1)} to{transform:translate(50px,40px) scale(1.15)} }
+
+/* ── NAV ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 22px 52px;
+  background: linear-gradient(to bottom, rgba(22,19,22,.92) 0%, transparent 100%);
+}
+.nav-logo {
+  font-family: var(--sans); font-size:19px; font-weight:600;
+  letter-spacing:-.03em; color:var(--white); text-decoration:none;
+}
+.nav-logo span { color:var(--orange); }
+.nav-links { display:flex; gap:36px; list-style:none; }
+.nav-links a {
+  font-size:13px; font-weight:400; color:var(--silver);
+  text-decoration:none; letter-spacing:.04em;
+  transition:color .2s;
+}
+.nav-links a:hover { color:var(--white); }
+.nav-cta {
+  padding:10px 22px; border-radius:100px;
+  background:var(--orange); color:var(--black);
+  font-size:13px; font-weight:500; text-decoration:none;
+  transition:transform .2s, box-shadow .2s;
+}
+.nav-cta:hover { transform:translateY(-1px); box-shadow:0 8px 28px rgba(255,109,41,.4); }
+
+/* ── HERO ── */
+.hero {
+  position:relative; z-index:1;
+  min-height:100vh; display:flex; flex-direction:column;
+  justify-content:center; padding:120px 52px 80px;
+  overflow:hidden;
+}
+.hero-counter {
+  font-size:11px; letter-spacing:.25em; text-transform:uppercase;
+  color:var(--orange); margin-bottom:40px;
+  opacity:0; animation:fu .9s .1s forwards;
+}
+.hero-h1 {
+  font-family: var(--serif);
+  font-size: clamp(68px, 10.5vw, 160px);
+  line-height:.88; letter-spacing:-.02em;
+  max-width:900px;
+  opacity:0; animation:fu .9s .25s forwards;
+}
+.hero-h1 .line2 { color:var(--orange); font-style:italic; display:block; }
+.hero-h1 .line3 { display:block; }
+.hero-bottom {
+  display:flex; align-items:flex-end; justify-content:space-between;
+  margin-top:60px; gap:40px; flex-wrap:wrap;
+  opacity:0; animation:fu .9s .5s forwards;
+}
+.hero-desc {
+  font-size:16px; font-weight:300; line-height:1.75;
+  color:var(--silver); max-width:420px;
+}
+.hero-actions { display:flex; gap:14px; align-items:center; flex-shrink:0; }
+.btn-p {
+  display:inline-flex; align-items:center; gap:9px;
+  padding:15px 30px; border-radius:100px;
+  background:var(--orange); color:var(--black);
+  font-size:14px; font-weight:500; text-decoration:none;
+  transition:transform .2s, box-shadow .2s; cursor:none;
+}
+.btn-p:hover { transform:translateY(-2px); box-shadow:0 14px 36px rgba(255,109,41,.4); }
+.btn-g {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:15px 30px; border-radius:100px;
+  border:1px solid rgba(255,255,255,.15); color:var(--white);
+  font-size:14px; text-decoration:none;
+  transition:border-color .2s, color .2s; cursor:none;
+}
+.btn-g:hover { border-color:var(--orange); color:var(--orange); }
+
+/* scrolling ticker */
+.ticker-wrap {
+  position:relative; z-index:1;
+  border-top:1px solid rgba(255,109,41,.15);
+  border-bottom:1px solid rgba(255,109,41,.15);
+  overflow:hidden; padding:14px 0; background:rgba(69,48,39,.12);
+}
+.ticker {
+  display:flex; gap:0; white-space:nowrap;
+  animation: tick 28s linear infinite;
+}
+.ticker span {
+  font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--silver); padding:0 36px;
+}
+.ticker span.dot { color:var(--orange); padding:0 8px; }
+@keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+@keyframes fu { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── GENERIC SECTION ── */
+section { position:relative; z-index:1; }
+.wrap { max-width:1140px; margin:0 auto; padding:0 52px; }
+.sec-label {
+  font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--orange); margin-bottom:56px;
+  display:flex; align-items:center; gap:14px;
+}
+.sec-label::after { content:''; flex:1; height:1px; background:rgba(255,109,41,.2); }
+
+/* ── SERVICES ── */
+.services { padding:130px 0; }
+.services-head {
+  display:flex; justify-content:space-between; align-items:flex-end;
+  margin-bottom:72px; gap:40px; flex-wrap:wrap;
+}
+.services-head h2 {
+  font-family:var(--serif);
+  font-size:clamp(40px,6vw,80px);
+  line-height:.95; letter-spacing:-.03em;
+  max-width:520px;
+}
+.services-head h2 em { font-style:italic; color:var(--orange); }
+.services-head p { font-size:15px; font-weight:300; color:var(--silver); line-height:1.75; max-width:320px; }
+
+.services-list { display:flex; flex-direction:column; }
+.service-row {
+  display:grid; grid-template-columns:48px 1fr auto;
+  align-items:center; gap:32px;
+  padding:32px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  cursor:none;
+  transition:background .3s;
+}
+.service-row:first-child { border-top:1px solid rgba(255,255,255,.06); }
+.service-row:hover .service-title { color:var(--orange); }
+.service-row:hover .service-num { border-color:var(--orange); color:var(--orange); }
+.service-num {
+  width:40px; height:40px; border-radius:50%;
+  border:1px solid rgba(255,255,255,.15);
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:400; color:var(--silver);
+  transition:all .3s;
+}
+.service-body { }
+.service-title { font-size:24px; font-weight:500; letter-spacing:-.02em; transition:color .3s; margin-bottom:6px; }
+.service-desc { font-size:14px; font-weight:300; color:var(--silver); line-height:1.6; }
+.service-tag {
+  font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--silver); background:rgba(69,48,39,.4);
+  border:1px solid rgba(255,109,41,.15);
+  padding:6px 14px; border-radius:100px; white-space:nowrap;
+}
+
+/* ── PROJECTS ── */
+.projects { padding:130px 0; }
+.projects-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:24px;
+  margin-top:0;
+}
+.proj-card {
+  border-radius:24px; overflow:hidden;
+  background:rgba(69,48,39,.2);
+  border:1px solid rgba(255,109,41,.1);
+  cursor:none; transition:transform .35s ease, border-color .35s ease;
+}
+.proj-card:hover { transform:translateY(-6px); border-color:rgba(255,109,41,.35); }
+.proj-card.big { grid-column:span 2; }
+.proj-visual {
+  height:280px; position:relative; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.proj-card.big .proj-visual { height:380px; }
+/* Generated visual backgrounds */
+.pv1 { background: radial-gradient(ellipse at 30% 50%, rgba(255,109,41,.6) 0%, transparent 70%), linear-gradient(135deg, #1e1018 0%, #2a1a10 100%); }
+.pv2 { background: radial-gradient(ellipse at 70% 30%, rgba(255,109,41,.4) 0%, transparent 65%), linear-gradient(135deg, #160f0c 0%, #1f1510 100%); }
+.pv3 { background: radial-gradient(ellipse at 50% 80%, rgba(255,109,41,.5) 0%, transparent 65%), linear-gradient(135deg, #0f0d10 0%, #1a1218 100%); }
+.proj-mock {
+  width:60%; height:70%; border-radius:12px;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(22,19,22,.7);
+  position:relative; overflow:hidden;
+  box-shadow:0 24px 64px rgba(0,0,0,.6);
+}
+.proj-mock::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:32px;
+  background:rgba(255,255,255,.04);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.proj-mock::after {
+  content:''; position:absolute; top:9px; left:12px;
+  width:8px; height:8px; border-radius:50%;
+  background:var(--orange); opacity:.7;
+  box-shadow:14px 0 0 rgba(255,255,255,.15), 28px 0 0 rgba(255,255,255,.1);
+}
+.mock-lines {
+  position:absolute; top:44px; left:16px; right:16px; bottom:16px;
+  display:flex; flex-direction:column; gap:8px;
+}
+.mock-line {
+  height:6px; border-radius:3px;
+  background:rgba(255,255,255,.08);
+}
+.mock-line.accent { background:rgba(255,109,41,.4); width:40%; }
+.mock-line.short { width:55%; }
+.mock-line.med { width:75%; }
+.mock-line.long { width:90%; }
+.mock-line.block {
+  height:48px; border-radius:8px;
+  background:rgba(255,109,41,.12); margin-top:4px;
+  border:1px solid rgba(255,109,41,.2);
+}
+
+.proj-info { padding:28px 32px 32px; }
+.proj-tag {
+  font-size:11px; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--orange); margin-bottom:10px;
+}
+.proj-name { font-size:22px; font-weight:500; letter-spacing:-.02em; margin-bottom:8px; }
+.proj-blurb { font-size:14px; font-weight:300; color:var(--silver); line-height:1.6; }
+.proj-link {
+  display:inline-flex; align-items:center; gap:6px;
+  margin-top:16px; font-size:13px; font-weight:400;
+  color:var(--orange); text-decoration:none;
+  transition:gap .2s;
+}
+.proj-link:hover { gap:10px; }
+
+/* ── PROCESS ── */
+.process { padding:130px 0; }
+.process-steps {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:0;
+  margin-top:8px; position:relative;
+}
+.process-steps::before {
+  content:''; position:absolute;
+  top:28px; left:calc(12.5% + 20px); right:calc(12.5% + 20px);
+  height:1px; background:linear-gradient(to right,rgba(255,109,41,.3),rgba(255,109,41,.1));
+}
+.step {
+  padding:0 28px 0 0; position:relative;
+}
+.step-num {
+  width:56px; height:56px; border-radius:50%;
+  background:rgba(69,48,39,.5); border:1px solid rgba(255,109,41,.3);
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; font-weight:600; color:var(--orange);
+  margin-bottom:24px; position:relative; z-index:1;
+  transition:background .3s, box-shadow .3s;
+}
+.step:hover .step-num { background:var(--orange); color:var(--black); box-shadow:0 0 32px rgba(255,109,41,.4); }
+.step-title { font-size:18px; font-weight:500; letter-spacing:-.01em; margin-bottom:10px; }
+.step-desc { font-size:14px; font-weight:300; color:var(--silver); line-height:1.65; }
+
+/* ── NUMBERS ── */
+.numbers { padding:80px 0; }
+.numbers-grid {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  border:1px solid rgba(255,109,41,.1);
+  border-radius:24px; overflow:hidden;
+  background:rgba(69,48,39,.12);
+}
+.num-item {
+  padding:48px 40px; text-align:center;
+  border-right:1px solid rgba(255,109,41,.1);
+  transition:background .3s;
+}
+.num-item:last-child { border-right:none; }
+.num-item:hover { background:rgba(255,109,41,.06); }
+.num-big {
+  font-family:var(--serif);
+  font-size:clamp(48px,6vw,80px); color:var(--white);
+  line-height:1; letter-spacing:-.03em;
+}
+.num-big span { color:var(--orange); }
+.num-label { font-size:13px; font-weight:300; color:var(--silver); margin-top:8px; letter-spacing:.05em; }
+
+/* ── TESTIMONIALS ── */
+.testimonials { padding:130px 0; }
+.testi-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; }
+.testi-card {
+  background:rgba(69,48,39,.18); border:1px solid rgba(255,109,41,.08);
+  border-radius:20px; padding:36px;
+  transition:border-color .3s, transform .3s; cursor:none;
+}
+.testi-card:hover { border-color:rgba(255,109,41,.25); transform:translateY(-4px); }
+.testi-stars { color:var(--orange); font-size:14px; letter-spacing:2px; margin-bottom:20px; }
+.testi-quote { font-size:15px; font-weight:300; line-height:1.75; color:var(--white); margin-bottom:28px; font-style:italic; }
+.testi-author { display:flex; align-items:center; gap:14px; }
+.testi-avatar {
+  width:40px; height:40px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:600; color:var(--black);
+  background:var(--orange); flex-shrink:0;
+}
+.testi-name { font-size:14px; font-weight:500; }
+.testi-role { font-size:12px; color:var(--silver); font-weight:300; }
+
+/* ── CTA BANNER ── */
+.cta-banner { padding:130px 0; }
+.cta-inner {
+  background: radial-gradient(ellipse at 30% 50%, rgba(255,109,41,.35) 0%, transparent 65%),
+              rgba(69,48,39,.25);
+  border:1px solid rgba(255,109,41,.2);
+  border-radius:32px; padding:90px 64px;
+  text-align:center; position:relative; overflow:hidden;
+}
+.cta-inner::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at 70% 50%, rgba(255,109,41,.15) 0%, transparent 60%);
+  pointer-events:none;
+}
+.cta-tag { font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--orange); margin-bottom:24px; }
+.cta-h2 {
+  font-family:var(--serif);
+  font-size:clamp(40px,7vw,96px);
+  line-height:.9; letter-spacing:-.03em; margin-bottom:32px;
+}
+.cta-h2 em { font-style:italic; color:var(--orange); }
+.cta-sub { font-size:17px; font-weight:300; color:var(--silver); line-height:1.7; max-width:480px; margin:0 auto 48px; }
+.cta-btns { display:flex; gap:16px; justify-content:center; align-items:center; flex-wrap:wrap; }
+
+/* ── FOOTER ── */
+footer {
+  position:relative; z-index:1;
+  border-top:1px solid rgba(255,255,255,.06);
+  padding:64px 52px 40px;
+}
+.footer-top {
+  display:grid; grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:64px; margin-bottom:64px;
+}
+.footer-brand {}
+.footer-logo-mark { font-size:24px; font-weight:600; letter-spacing:-.03em; margin-bottom:16px; }
+.footer-logo-mark span { color:var(--orange); }
+.footer-tagline { font-size:14px; font-weight:300; color:var(--silver); line-height:1.7; max-width:260px; margin-bottom:28px; }
+.footer-contact a {
+  display:flex; align-items:center; gap:8px;
+  font-size:13px; color:var(--silver); text-decoration:none;
+  margin-bottom:8px; transition:color .2s;
+}
+.footer-contact a:hover { color:var(--orange); }
+.footer-col h4 { font-size:12px; letter-spacing:.15em; text-transform:uppercase; color:var(--orange); margin-bottom:20px; }
+.footer-col ul { list-style:none; display:flex; flex-direction:column; gap:12px; }
+.footer-col ul a { font-size:14px; font-weight:300; color:var(--silver); text-decoration:none; transition:color .2s; }
+.footer-col ul a:hover { color:var(--white); }
+.footer-bottom {
+  display:flex; justify-content:space-between; align-items:center;
+  padding-top:32px; border-top:1px solid rgba(255,255,255,.05);
+  flex-wrap:wrap; gap:16px;
+}
+.footer-copy { font-size:12px; color:rgba(186,186,186,.4); }
+.footer-socials { display:flex; gap:20px; }
+.footer-socials a {
+  font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--silver); text-decoration:none; transition:color .2s;
+}
+.footer-socials a:hover { color:var(--orange); }
+
+/* ── DIVIDER ── */
+hr.div { border:none; height:1px; background:linear-gradient(to right, transparent, rgba(255,109,41,.25), transparent); margin:0 52px; }
+
+/* ── REVEAL ── */
+.r { opacity:0; transform:translateY(30px); transition:opacity .75s ease, transform .75s ease; }
+.r.v { opacity:1; transform:translateY(0); }
+.r2 { transition-delay:.12s; }
+.r3 { transition-delay:.24s; }
+
+/* ── HAMBURGER ── */
+.nav-burger {
+  display:none; flex-direction:column; justify-content:center;
+  gap:5px; width:36px; height:36px; cursor:none;
+  background:none; border:none; padding:4px; z-index:300;
+}
+.nav-burger span {
+  display:block; height:1.5px; border-radius:2px;
+  background:var(--white); transition:transform .3s ease, opacity .3s ease, width .3s ease;
+  transform-origin:center;
+}
+.nav-burger span:nth-child(1) { width:22px; }
+.nav-burger span:nth-child(2) { width:16px; }
+.nav-burger span:nth-child(3) { width:22px; }
+.nav-burger.open span:nth-child(1) { transform:translateY(6.5px) rotate(45deg); width:22px; }
+.nav-burger.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
+.nav-burger.open span:nth-child(3) { transform:translateY(-6.5px) rotate(-45deg); width:22px; }
+
+/* ── MOBILE MENU OVERLAY ── */
+.mobile-menu {
+  position:fixed; inset:0; z-index:250;
+  background:rgba(22,19,22,.97);
+  backdrop-filter:blur(20px);
+  display:flex; flex-direction:column;
+  justify-content:center; align-items:flex-start;
+  padding:32px;
+  opacity:0; pointer-events:none;
+  transition:opacity .35s ease;
+}
+.mobile-menu.open { opacity:1; pointer-events:all; }
+.mobile-menu nav-m-logo {
+  font-size:20px; font-weight:600; color:var(--white);
+  margin-bottom:56px; letter-spacing:-.03em;
+}
+.mobile-menu ul {
+  list-style:none; display:flex; flex-direction:column; gap:8px;
+  width:100%;
+}
+.mobile-menu ul li a {
+  font-family:var(--serif);
+  font-size:clamp(40px,12vw,64px);
+  font-style:italic;
+  color:var(--white); text-decoration:none;
+  display:block; padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  transition:color .2s, padding-left .2s;
+  letter-spacing:-.02em; line-height:1.1;
+}
+.mobile-menu ul li a:hover { color:var(--orange); padding-left:12px; }
+.mobile-menu-footer {
+  margin-top:48px; display:flex; flex-direction:column; gap:10px;
+}
+.mobile-menu-footer a {
+  font-size:14px; color:var(--silver); text-decoration:none; transition:color .2s;
+}
+.mobile-menu-footer a:hover { color:var(--orange); }
+
+/* ══════════════════════════════
+   TABLET  (max 900px)
+══════════════════════════════ */
+@media(max-width:900px) {
+  /* cursor off on touch */
+  body { cursor:auto; }
+  #cur { display:none; }
+  .btn-p, .btn-g, .nav-cta { cursor:pointer; }
+
+  /* nav */
+  nav { padding:18px 24px; }
+  .nav-links { display:none; }
+  .nav-burger { display:flex; }
+
+  /* hero */
+  .hero { padding:110px 24px 56px; min-height:95vh; }
+  .hero-bottom { flex-direction:column; align-items:flex-start; gap:28px; }
+  .hero-actions { flex-direction:column; width:100%; }
+  .btn-p, .btn-g { width:100%; justify-content:center; }
+
+  /* wrap */
+  .wrap { padding:0 24px; }
+  hr.div { margin:0 24px; }
+
+  /* numbers */
+  .numbers-grid { grid-template-columns:1fr 1fr; }
+  .num-item { padding:32px 20px; }
+  .num-item:nth-child(2) { border-right:none; }
+  .num-item:nth-child(3) { border-top:1px solid rgba(255,109,41,.1); }
+
+  /* services */
+  .services { padding:80px 0; }
+  .services-head { flex-direction:column; gap:20px; margin-bottom:48px; }
+  .services-head p { max-width:100%; }
+  .service-row { grid-template-columns:40px 1fr; gap:20px; padding:24px 0; }
+  .service-tag { display:none; }
+  .service-title { font-size:20px; }
+
+  /* projects */
+  .projects { padding:80px 0; }
+  .projects-grid { grid-template-columns:1fr; }
+  .proj-card.big { grid-column:span 1; }
+  .proj-card.big .proj-visual { height:260px; }
+  .proj-visual { height:220px; }
+  .proj-info { padding:20px 24px 24px; }
+  .proj-name { font-size:19px; }
+
+  /* process */
+  .process { padding:80px 0; }
+  .process-steps { grid-template-columns:1fr 1fr; gap:40px 24px; }
+  .process-steps::before { display:none; }
+  .step { padding:0; }
+
+  /* testimonials */
+  .testimonials { padding:80px 0; }
+  .testi-grid { grid-template-columns:1fr; gap:16px; }
+
+  /* cta */
+  .cta-banner { padding:80px 0; }
+  .cta-inner { padding:56px 28px; border-radius:24px; }
+  .cta-btns { flex-direction:column; }
+  .cta-btns .btn-p,
+  .cta-btns .btn-g { width:100%; justify-content:center; font-size:14px !important; padding:14px 24px !important; }
+
+  /* footer */
+  footer { padding:48px 24px 32px; }
+  .footer-top { grid-template-columns:1fr 1fr; gap:40px; }
+  .footer-brand { grid-column:span 2; }
+}
+
+/* ══════════════════════════════
+   MOBILE  (max 520px)
+══════════════════════════════ */
+@media(max-width:520px) {
+  /* nav */
+  nav { padding:16px 20px; }
+  .nav-cta { display:none; }
+
+  /* hero */
+  .hero { padding:96px 20px 48px; }
+  .hero-counter { font-size:10px; margin-bottom:28px; }
+  .hero-desc { font-size:15px; }
+
+  /* wrap */
+  .wrap { padding:0 20px; }
+  hr.div { margin:0 20px; }
+
+  /* section label */
+  .sec-label { margin-bottom:36px; }
+
+  /* numbers — stack 2×2 stays, reduce padding */
+  .numbers { padding:56px 0; }
+  .num-item { padding:28px 16px; }
+  .num-label { font-size:11px; }
+
+  /* services */
+  .services { padding:64px 0; }
+  .services-head { margin-bottom:36px; }
+  .service-row { gap:16px; padding:20px 0; }
+  .service-title { font-size:18px; }
+  .service-desc { font-size:13px; }
+
+  /* projects */
+  .projects { padding:64px 0; }
+  .proj-visual { height:190px; }
+  .proj-card.big .proj-visual { height:220px; }
+  .proj-mock { width:72%; height:75%; }
+  .proj-info { padding:18px 20px 20px; }
+  .proj-name { font-size:17px; }
+  .proj-blurb { font-size:13px; }
+
+  /* process — single column */
+  .process { padding:64px 0; }
+  .process-steps { grid-template-columns:1fr; gap:36px; }
+  .step-num { width:48px; height:48px; font-size:16px; }
+
+  /* testimonials */
+  .testimonials { padding:64px 0; }
+  .testi-card { padding:28px 24px; }
+  .testi-quote { font-size:14px; }
+
+  /* cta */
+  .cta-banner { padding:64px 0; }
+  .cta-inner { padding:44px 20px; border-radius:20px; }
+  .cta-sub { font-size:15px; }
+
+  /* footer */
+  footer { padding:40px 20px 28px; }
+  .footer-top { grid-template-columns:1fr; gap:32px; }
+  .footer-brand { grid-column:span 1; }
+  .footer-tagline { max-width:100%; }
+  .footer-bottom { flex-direction:column; align-items:flex-start; gap:12px; }
+
+  /* mobile menu overlay tweaks */
+  .mobile-menu { padding:24px 20px; }
+  .mobile-menu ul li a { font-size:clamp(36px,10vw,52px); }
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div class="gb gb1"></div>
+<div class="gb gb2"></div>
+<div class="gb gb3"></div>
+
+<!-- MOBILE MENU OVERLAY -->
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="#services" class="menu-link">Služby</a></li>
+    <li><a href="#projects" class="menu-link">Projekty</a></li>
+    <li><a href="#process" class="menu-link">Proces</a></li>
+    <li><a href="#contact" class="menu-link">Kontakt</a></li>
+  </ul>
+  <div class="mobile-menu-footer">
+    <a href="mailto:hello@ember.studio">hello@ember.studio</a>
+    <a href="tel:+421900000000">+421 900 000 000</a>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">ember<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Služby</a></li>
+    <li><a href="#projects">Projekty</a></li>
+    <li><a href="#process">Proces</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Začnime →</a>
+  <button class="nav-burger" id="burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-counter">Est. 2017 &nbsp;·&nbsp; Bratislava, SK</p>
+  <h1 class="hero-h1">
+    Tvoríme weby,
+    <span class="line2">ktoré zapália</span>
+    <span class="line3">pozornosť.</span>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-desc">Sme dizajnové a vývojárske štúdio, ktoré vytvára výnimočné digitálne zážitky pre značky s ambíciou vyniknúť. Web dizajn, UI/UX, branding — pod jednou strechou.</p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-p">Pozrieť práce →</a>
+      <a href="#contact" class="btn-g">Kontakt</a>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span>Web Design</span><span class="dot">·</span>
+    <span>UI / UX</span><span class="dot">·</span>
+    <span>Branding</span><span class="dot">·</span>
+    <span>E-commerce</span><span class="dot">·</span>
+    <span>Motion Design</span><span class="dot">·</span>
+    <span>Development</span><span class="dot">·</span>
+    <span>Vizuálna identita</span><span class="dot">·</span>
+    <span>Copywriting</span><span class="dot">·</span>
+    <span>Web Design</span><span class="dot">·</span>
+    <span>UI / UX</span><span class="dot">·</span>
+    <span>Branding</span><span class="dot">·</span>
+    <span>E-commerce</span><span class="dot">·</span>
+    <span>Motion Design</span><span class="dot">·</span>
+    <span>Development</span><span class="dot">·</span>
+    <span>Vizuálna identita</span><span class="dot">·</span>
+    <span>Copywriting</span><span class="dot">·</span>
+  </div>
+</div>
+
+<!-- NUMBERS -->
+<section class="numbers" style="padding-top:80px; padding-bottom:0;">
+  <div class="wrap">
+    <div class="numbers-grid r">
+      <div class="num-item">
+        <div class="num-big">140<span>+</span></div>
+        <div class="num-label">Dokončených projektov</div>
+      </div>
+      <div class="num-item">
+        <div class="num-big">8<span>yr</span></div>
+        <div class="num-label">Na trhu</div>
+      </div>
+      <div class="num-item">
+        <div class="num-big">99<span>%</span></div>
+        <div class="num-label">Spokojnosť klientov</div>
+      </div>
+      <div class="num-item">
+        <div class="num-big">3<span>×</span></div>
+        <div class="num-label">Ocenení dizajn</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="div" style="margin-top:80px;">
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="wrap">
+    <p class="sec-label r">Čo robíme</p>
+    <div class="services-head">
+      <h2 class="r">Kompletný<br>digitálny <em>ekosystém</em><br>pre vašu značku.</h2>
+      <p class="r r2">Od prvého konceptu až po živý produkt — sprevádzame vás každým krokom tvorby digitálnej prezentácie.</p>
+    </div>
+    <div class="services-list r">
+      <div class="service-row">
+        <div class="service-num">01</div>
+        <div class="service-body">
+          <div class="service-title">Web dizajn & Development</div>
+          <div class="service-desc">Responzívne weby postavené na moderných technológiách. Od marketingových stránok po komplexné platformy.</div>
+        </div>
+        <span class="service-tag">HTML · CSS · JS · React</span>
+      </div>
+      <div class="service-row">
+        <div class="service-num">02</div>
+        <div class="service-body">
+          <div class="service-title">UI / UX Design</div>
+          <div class="service-desc">Intuitívne rozhrania navrhnuté na základe výskumu používateľov. Wireframy, prototypy, dizajn systémy.</div>
+        </div>
+        <span class="service-tag">Figma · Framer · Webflow</span>
+      </div>
+      <div class="service-row">
+        <div class="service-num">03</div>
+        <div class="service-body">
+          <div class="service-title">Vizuálna identita & Branding</div>
+          <div class="service-desc">Logo, typografia, farebné systémy a brand guidelines, ktoré vytvárajú nezabudnuteľný prvý dojem.</div>
+        </div>
+        <span class="service-tag">Logo · Manuál · Tlač</span>
+      </div>
+      <div class="service-row">
+        <div class="service-num">04</div>
+        <div class="service-body">
+          <div class="service-title">E-commerce riešenia</div>
+          <div class="service-desc">Výkonné online obchody optimalizované pre konverzie. Shopify, WooCommerce alebo custom riešenia.</div>
+        </div>
+        <span class="service-tag">Shopify · WooCommerce</span>
+      </div>
+      <div class="service-row">
+        <div class="service-num">05</div>
+        <div class="service-body">
+          <div class="service-title">Motion & 3D Design</div>
+          <div class="service-desc">Animácie, interaktívne efekty a 3D vizualizácie, ktoré posúvajú váš web na ďalšiu úroveň.</div>
+        </div>
+        <span class="service-tag">GSAP · Three.js · Blender</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- PROJECTS -->
+<section class="projects" id="projects">
+  <div class="wrap">
+    <p class="sec-label r">Vybrané projekty</p>
+    <div class="projects-grid">
+
+      <div class="proj-card big r">
+        <div class="proj-visual pv1">
+          <div class="proj-mock" style="width:65%; height:72%;">
+            <div class="mock-lines">
+              <div class="mock-line accent"></div>
+              <div class="mock-line long" style="margin-top:4px;"></div>
+              <div class="mock-line med"></div>
+              <div class="mock-line block"></div>
+              <div class="mock-line short"></div>
+              <div class="mock-line long"></div>
+              <div class="mock-line med"></div>
+              <div class="mock-line short" style="width:30%;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="proj-info">
+          <div class="proj-tag">E-commerce · Branding</div>
+          <div class="proj-name">Velo — Prémiový cyklistický obchod</div>
+          <div class="proj-blurb">Kompletná rebrandingová kampaň a nový e-commerce systém pre prémiového distribútora cyklistiky. Navýšenie konverzií o 34 % v prvom kvartáli po spustení.</div>
+          <a href="#" class="proj-link">Zobraziť projekt →</a>
+        </div>
+      </div>
+
+      <div class="proj-card r">
+        <div class="proj-visual pv2">
+          <div class="proj-mock">
+            <div class="mock-lines">
+              <div class="mock-line accent"></div>
+              <div class="mock-line med"></div>
+              <div class="mock-line long"></div>
+              <div class="mock-line block"></div>
+              <div class="mock-line short"></div>
+            </div>
+          </div>
+        </div>
+        <div class="proj-info">
+          <div class="proj-tag">Web Design · UI/UX</div>
+          <div class="proj-name">Archis Architects</div>
+          <div class="proj-blurb">Minimalistické portfólio pre architektonické štúdio s dôrazom na prezentáciu projektov.</div>
+          <a href="#" class="proj-link">Zobraziť →</a>
+        </div>
+      </div>
+
+      <div class="proj-card r r2">
+        <div class="proj-visual pv3">
+          <div class="proj-mock">
+            <div class="mock-lines">
+              <div class="mock-line accent"></div>
+              <div class="mock-line long"></div>
+              <div class="mock-line block"></div>
+              <div class="mock-line med"></div>
+              <div class="mock-line short"></div>
+            </div>
+          </div>
+        </div>
+        <div class="proj-info">
+          <div class="proj-tag">Branding · Print</div>
+          <div class="proj-name">Nomad Coffee Roasters</div>
+          <div class="proj-blurb">Kompletná vizuálna identita vrátane obalového dizajnu, web stránky a sociálnych médií.</div>
+          <a href="#" class="proj-link">Zobraziť →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="wrap">
+    <p class="sec-label r">Náš proces</p>
+    <div class="process-steps r">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">Discovery</div>
+        <div class="step-desc">Spoznáme vás, váš biznis, cieľové publikum a konkurenciu. Spoločne definujeme ciele projektu.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">Stratégia</div>
+        <div class="step-desc">Na základe výskumu navrhneme informačnú architektúru, wireframy a content stratégiu.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">Dizajn</div>
+        <div class="step-desc">Vytvoríme vizuálne návrhy v Figme. Iterujeme na základe vašich pripomienok až do dokonalosti.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-title">Spustenie</div>
+        <div class="step-desc">Implementujeme, testujeme a spustíme. Poskytujeme podporu aj po odovzdaní projektu.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="wrap">
+    <p class="sec-label r">Klienti o nás</p>
+    <div class="testi-grid">
+      <div class="testi-card r">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"Ember Studio nám vytvorilo web, ktorý naozaj predáva. Konverzie vzrástli trojnásobne. Profesionalita a kreativita na najvyššej úrovni."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">MK</div>
+          <div>
+            <div class="testi-name">Martin Kováč</div>
+            <div class="testi-role">CEO · Velo Bikes</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card r r2">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"Od prvého hovoru vedeli presne, čo potrebujeme. Výsledok predbehol naše očakávania — elegantný, rýchly a presne na mieru."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">ZN</div>
+          <div>
+            <div class="testi-name">Zuzana Novotná</div>
+            <div class="testi-role">Founder · Archis Studio</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card r r3">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-quote">"Branding, ktorý Ember vytvoril, sa stal súčasťou DNA našej značky. Zákazníci si nás okamžite zapamätajú. Výborná spolupráca."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">TH</div>
+          <div>
+            <div class="testi-name">Tomáš Horváth</div>
+            <div class="testi-role">Marketing Dir. · Nomad Coffee</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-banner" id="contact">
+  <div class="wrap">
+    <div class="cta-inner r">
+      <p class="cta-tag">Nový projekt</p>
+      <h2 class="cta-h2">Máte nápad?<br><em>Poďme ho</em><br>rozhorieť.</h2>
+      <p class="cta-sub">Napíšte nám o vašom projekte. Prvá konzultácia je zadarmo — radi si vypočujeme, čo potrebujete.</p>
+      <div class="cta-btns">
+        <a href="mailto:hello@ember.studio" class="btn-p" style="font-size:15px; padding:16px 36px;">hello@ember.studio →</a>
+        <a href="tel:+421900000000" class="btn-g" style="font-size:15px; padding:16px 36px;">+421 900 000 000</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo-mark">ember<span>.</span></div>
+      <p class="footer-tagline">Web dizajn a development štúdio z Bratislavy. Tvoríme digitálne zážitky, ktoré zanechávajú stopu.</p>
+      <div class="footer-contact">
+        <a href="mailto:hello@ember.studio">✉ hello@ember.studio</a>
+        <a href="#">📍 Bratislava, Slovensko</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Služby</h4>
+      <ul>
+        <li><a href="#">Web dizajn</a></li>
+        <li><a href="#">UI / UX</a></li>
+        <li><a href="#">Branding</a></li>
+        <li><a href="#">E-commerce</a></li>
+        <li><a href="#">Motion Design</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Štúdio</h4>
+      <ul>
+        <li><a href="#">O nás</a></li>
+        <li><a href="#">Projekty</a></li>
+        <li><a href="#">Proces</a></li>
+        <li><a href="#">Kariéra</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Sociálne</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Behance</a></li>
+        <li><a href="#">Dribbble</a></li>
+        <li><a href="#">LinkedIn</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Ember Studio s.r.o. — Fiktívna spoločnosť</span>
+    <div class="footer-socials">
+      <a href="#">IG</a>
+      <a href="#">BE</a>
+      <a href="#">LI</a>
+      <a href="#">DR</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Touch detection ──
+const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+// ── Custom cursor (desktop only) ──
+const cur = document.getElementById('cur');
+if (!isTouch) {
+  let mx=0,my=0,cx=0,cy=0;
+  document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; });
+  (function loop(){ cx+=(mx-cx)*.18; cy+=(my-cy)*.18; cur.style.left=cx+'px'; cur.style.top=cy+'px'; requestAnimationFrame(loop); })();
+  document.querySelectorAll('a,button,.proj-card,.testi-card,.step,.service-row').forEach(el=>{
+    el.addEventListener('mouseenter',()=>cur.classList.add('big'));
+    el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+  });
+} else {
+  cur.style.display='none';
+  document.body.style.cursor='auto';
+}
+
+// ── Hamburger menu ──
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+let menuOpen = false;
+
+burger.addEventListener('click', () => {
+  menuOpen = !menuOpen;
+  burger.classList.toggle('open', menuOpen);
+  mobileMenu.classList.toggle('open', menuOpen);
+  document.body.style.overflow = menuOpen ? 'hidden' : '';
+});
+
+// Close on link tap
+document.querySelectorAll('.menu-link').forEach(link => {
+  link.addEventListener('click', () => {
+    menuOpen = false;
+    burger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
+// ── Scroll reveal ──
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('v'); });
+},{threshold:0.08});
+document.querySelectorAll('.r').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
