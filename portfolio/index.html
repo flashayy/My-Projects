@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Samuel Michalik – weby pre malé firmy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;800&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e0f13;--panel:#16171c;--ink:#ecebe6;--muted:#9a9ba3;--line:#272830;--accent:#b8b3ff;--on-accent:#12111f;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f6f5f1;--panel:#fff;--ink:#15151a;--muted:#6a6b73;--line:#deddd6;--accent:#4a42d6;--on-accent:#fff;color-scheme:light}}
+:root[data-theme="light"]{--bg:#f6f5f1;--panel:#fff;--ink:#15151a;--muted:#6a6b73;--line:#deddd6;--accent:#4a42d6;--on-accent:#fff;color-scheme:light}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.65 "Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:Syne,"Hanken Grotesk",system-ui,sans-serif;margin:0;line-height:1.02;letter-spacing:-.025em}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 1.25rem}
+header .wrap{display:flex;justify-content:space-between;align-items:center;padding-top:1.3rem;padding-bottom:1.3rem}
+.logo{font:800 1.15rem Syne,sans-serif;text-decoration:none}
+nav{display:flex;gap:1.6rem;align-items:center}
+nav a{text-decoration:none;color:var(--muted);font-weight:500}
+nav a:hover{color:var(--ink)}
+.btn{display:inline-block;background:var(--accent);color:var(--on-accent);border-radius:999px;padding:.8rem 1.5rem;font:600 1rem "Hanken Grotesk",sans-serif;text-decoration:none;border:0;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+a:focus-visible,.btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.hero{padding:4.5rem 0 5rem}
+.hero h1{font-size:clamp(2.8rem,9vw,7rem);font-weight:800;max-width:14ch}
+.hero p{font-size:1.2rem;color:var(--muted);max-width:44ch;margin:1.6rem 0 2.2rem}
+.hero .row{display:flex;gap:.8rem;flex-wrap:wrap}
+section{padding:4.5rem 0;border-top:1px solid var(--line)}
+h2{font-size:clamp(2rem,5vw,3.4rem);font-weight:800}
+.lead{color:var(--muted);max-width:56ch;margin:1rem 0 2.5rem}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:1.1rem;padding:1rem 1rem 1.3rem;transition:transform .25s ease,border-color .25s ease}
+.card:hover{transform:translateY(-4px);border-color:var(--accent)}
+.card h3{font-size:1.35rem;margin:1.1rem .3rem .3rem}
+.card p{margin:0 .3rem;color:var(--muted);font-size:.97rem}
+.card .meta{display:flex;justify-content:space-between;align-items:center;margin:1rem .3rem 0}
+.card .meta a{font-weight:600;color:var(--accent);text-decoration:none}
+.mock{container-type:inline-size;background:var(--b);color:var(--f);border-radius:.7rem;overflow:hidden;aspect-ratio:4/3;display:flex;flex-direction:column}
+.mock .bar{display:flex;gap:.3rem;padding:.5rem .7rem;background:#00000022}
+.mock .bar i{width:.45rem;height:.45rem;border-radius:50%;background:currentColor;opacity:.35}
+.mp{padding:.9rem 1.1rem;display:flex;flex-direction:column;flex:1}
+.mn{display:flex;align-items:center;gap:.6rem;font-size:3.6cqw}
+.mn b{margin-right:auto;font-weight:800}
+.mn span{width:9cqw;height:1.2cqw;background:currentColor;opacity:.35;border-radius:2cqw}
+.mh{font:800 8.4cqw/1.02 Syne,sans-serif;margin:7cqw 0 4cqw;max-width:14ch}
+.mb{align-self:flex-start;background:var(--a);color:var(--b);font-weight:600;font-size:3.4cqw;padding:1.6cqw 4cqw;border-radius:99px}
+.mr{display:grid;grid-template-columns:repeat(3,1fr);gap:2.5cqw;margin-top:auto}
+.mr u{height:11cqw;border-radius:2cqw;background:currentColor;opacity:.13}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem;counter-reset:s}
+.step{border-top:2px solid var(--accent);padding-top:1rem}
+.step::before{counter-increment:s;content:counter(s);font:800 2.4rem Syne,sans-serif;color:var(--accent)}
+.step h3{font-size:1.2rem;margin:.4rem 0}
+.step p{margin:0;color:var(--muted);font-size:.97rem}
+.pk{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:1.1rem;padding:1.6rem}
+.pk.main{border-color:var(--accent)}
+.pk .pr{font:800 2.6rem Syne,sans-serif;margin:.5rem 0 1rem}
+.pk .pr small{font:500 1rem "Hanken Grotesk",sans-serif;color:var(--muted)}
+.pk ul{margin:0 0 1.4rem;padding-left:1.1rem;color:var(--muted)}
+.pk li{margin-bottom:.4rem}
+.pk .btn{margin-top:auto;text-align:center}
+.skills{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.skills h3{font-size:1.4rem;margin-bottom:.5rem}
+.skills p{margin:0;color:var(--muted)}
+.contact a.big{display:block;font:800 clamp(1.6rem,5vw,3.4rem) Syne,sans-serif;text-decoration:none;overflow-wrap:anywhere;margin-top:1.4rem}
+footer{border-top:1px solid var(--line);padding:2rem 0 3rem;color:var(--muted);font-size:.92rem}
+@media (max-width:860px){.grid,.skills{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){nav a:not(.btn){display:none}.grid,.skills,.steps{grid-template-columns:1fr}.hero{padding-top:2.5rem}}
+@media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="logo" href="#top" id="logo"></a><nav><a href="#sablony">Šablóny</a><a href="#postup">Postup</a><a href="#ceny">Ceny</a><a class="btn" id="navMail" href="#">Napísať</a></nav></div></header>
+<main id="top">
+<div class="hero"><div class="wrap">
+  <h1 id="tagline"></h1>
+  <p id="sub"></p>
+  <div class="row"><a class="btn" href="#sablony">Pozrieť šablóny</a><a class="btn ghost" href="#ceny">Cenník</a></div>
+</div></div>
+
+<section id="sablony"><div class="wrap">
+  <h2>Šablóny pre vaše odvetvie</h2>
+  <p class="lead">Každá šablóna je pripravená na rýchle spustenie. Prispôsobím ju vášmu logu, farbám, textom a fotkám, takže web dostanete za pár dní, nie týždňov.</p>
+  <div class="grid" id="tpl"></div>
+</div></section>
+
+<section id="postup"><div class="wrap">
+  <h2>Ako to prebieha</h2>
+  <p class="lead">Jednoduchý postup, pri ktorom viete, čo kedy príde.</p>
+  <div class="steps" id="steps"></div>
+</div></section>
+
+<section id="ceny"><div class="wrap">
+  <h2>Ceny</h2>
+  <p class="lead">Jednorazové spustenie a voliteľná mesačná správa. Žiadne skryté poplatky.</p>
+  <div class="grid" id="pk"></div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Čo ešte robím</h2>
+  <p class="lead">Okrem webov z šablón pomôžem aj s vizuálom značky.</p>
+  <div class="skills" id="skills"></div>
+</div></section>
+
+<section id="kontakt"><div class="wrap contact">
+  <h2>Poďme na váš web</h2>
+  <p class="lead">Napíšte, čo robíte a čo potrebujete. Odpoviem do 24 hodín s návrhom a cenou.</p>
+  <a class="big" id="mail" href="#"></a>
+</div></section>
+</main>
+<footer><div class="wrap" id="foot"></div></footer>
+
+<script>
+/* ===== KONFIGURÁCIA: texty, šablóny a ceny upravíte tu ===== */
+const CONFIG = {
+  name: "Samuel Michalik",
+  email: "samuel@priklad.sk",
+  tagline: "Weby pre malé firmy, hotové za 5 dní.",
+  sub: "Vyberiete si šablónu pre svoje odvetvie, ja ju prispôsobím vašej značke a postarám sa aj o správu po spustení.",
+  templates: [
+    {name:"Kaderníctvo a salóny", d:"Cenník s výberom služieb a rezervačný e-mail.", from:199, brand:"Salón", h:"Strih na mieru.", cta:"Objednať sa", b:"#3a1630", f:"#f6e9ef", a:"#e6b657"},
+    {name:"Autoservis", d:"Služby, kalkulačka ceny a kontakt s mapou.", from:199, brand:"Servis", h:"Auto späť na ceste.", cta:"Zavolať", b:"#16191f", f:"#eceff3", a:"#ff8a3d"},
+    {name:"Fitnes a tréneri", d:"Rozvrh lekcií, permanentky a formulár na skúšobnú hodinu.", from:229, brand:"Fit", h:"Prvý tréning zdarma.", cta:"Rezervovať", b:"#0f1410", f:"#eef5ea", a:"#b6f23a"},
+    {name:"Kaviarne a reštaurácie", d:"Menu, otváracie hodiny a galéria prevádzky.", from:199, brand:"Café", h:"Káva, ktorá vás zdrží.", cta:"Pozrieť menu", b:"#2a1d15", f:"#f5ebe0", a:"#d99a5b"},
+    {name:"Remeselníci a stavba", d:"Referencie, rozsah prác a dopyt na cenovú ponuku.", from:199, brand:"Stav", h:"Robíme poriadne.", cta:"Získať ponuku", b:"#23282e", f:"#f1f2f4", a:"#f2c230"},
+    {name:"Kozmetika a wellness", d:"Ošetrenia, cenník a online objednávanie.", from:219, brand:"Glow", h:"Čas pre seba.", cta:"Objednať", b:"#e9efe8", f:"#1f2a23", a:"#2f5d46"}
+  ],
+  steps: [
+    ["Výber šablóny","Vyberiete odvetvie, ktoré sa najviac približuje vášmu podnikaniu."],
+    ["Podklady","Pošlete logo, texty a fotky. Ak ich nemáte, pomôžem ich pripraviť."],
+    ["Návrh do 5 dní","Dostanete hotový web na schválenie a upravíme, čo treba."],
+    ["Spustenie a správa","Web beží na vašej doméne. Voliteľne sa o neho starám mesačne."]
+  ],
+  packages: [
+    {n:"Štart", pr:"199 €", unit:"jednorazovo", items:["Web z vybranej šablóny","Prispôsobenie značke a obsahu","Zobrazenie na mobile aj počítači","Základné SEO a nastavenie domény"], main:true},
+    {n:"Správa", pr:"29 €", unit:"mesačne", items:["Hosting a aktualizácie","Pravidelné zálohy","Do 2 drobných úprav mesačne","Minimálna doba 6 mesiacov"]},
+    {n:"Na mieru", pr:"od 450 €", unit:"", items:["Viac stránok a vlastný dizajn","Rezervácie, blog alebo e-shop","Individuálna cenová ponuka"]}
+  ],
+  skills: [
+    ["Webdizajn a vývoj","Rýchle a prehľadné weby, ktoré fungujú na každom zariadení."],
+    ["Digitálna grafika","Logá, vizuálna identita a grafika pre sociálne siete."],
+    ["3D modelovanie","Produktové vizualizácie a modely pre prezentáciu alebo tlač."]
+  ],
+  credit: "Všetky ceny sú orientačné a bez DPH, ak nie je dohodnuté inak."
+};
+/* ===== Koniec konfigurácie ===== */
+
+const $ = id => document.getElementById(id);
+const mail = (subj) => "mailto:" + CONFIG.email + "?subject=" + encodeURIComponent(subj);
+$("logo").textContent = CONFIG.name;
+$("tagline").textContent = CONFIG.tagline;
+$("sub").textContent = CONFIG.sub;
+$("navMail").href = mail("Dopyt na web");
+$("mail").href = mail("Dopyt na web");
+$("mail").textContent = CONFIG.email;
+$("foot").textContent = "© " + new Date().getFullYear() + " " + CONFIG.name + ". " + CONFIG.credit;
+
+const mock = t => '<div class="mock" style="--b:'+t.b+';--f:'+t.f+';--a:'+t.a+'" aria-hidden="true"><div class="bar"><i></i><i></i><i></i></div><div class="mp"><div class="mn"><b>'+t.brand+'</b><span></span><span></span><span></span></div><div class="mh">'+t.h+'</div><div class="mb">'+t.cta+'</div><div class="mr"><u></u><u></u><u></u></div></div></div>';
+
+$("tpl").innerHTML = CONFIG.templates.map(t =>
+  '<article class="card">'+mock(t)+'<h3>'+t.name+'</h3><p>'+t.d+'</p><div class="meta"><span>od '+t.from+' €</span><a href="'+mail("Šablóna: "+t.name)+'">Mám záujem</a></div></article>'
+).join("");
+
+$("steps").innerHTML = CONFIG.steps.map(s => '<div class="step"><h3>'+s[0]+'</h3><p>'+s[1]+'</p></div>').join("");
+
+$("pk").innerHTML = CONFIG.packages.map(p =>
+  '<div class="pk'+(p.main?' main':'')+'"><h3>'+p.n+'</h3><div class="pr">'+p.pr+' <small>'+p.unit+'</small></div><ul>'+p.items.map(i=>'<li>'+i+'</li>').join("")+'</ul><a class="btn'+(p.main?'':' ghost')+'" href="'+mail("Balíček: "+p.n)+'">Mám záujem</a></div>'
+).join("");
+
+$("skills").innerHTML = CONFIG.skills.map(s => '<div><h3>'+s[0]+'</h3><p>'+s[1]+'</p></div>').join("");
+</script>
+</body>
+</html>
